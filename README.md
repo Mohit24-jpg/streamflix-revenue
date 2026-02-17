@@ -19,7 +19,7 @@ Streamflix is a fault-tolerant streaming data pipeline designed to ingest, proce
 ## ⚡ How to Run
 1.  **Clone the repo:**
     ```bash
-    git clone [https://github.com/MohitVaid/streamflix-revenue.git](https://github.com/MohitVaid/streamflix-revenue.git)
+    git clone [https://github.com/MohitVaid/streamflix-revenue.git](https://github.com/Mohit24-jpg/streamflix-revenue.git)
     cd streamflix-revenue
     ```
 2.  **Start Infrastructure:**
