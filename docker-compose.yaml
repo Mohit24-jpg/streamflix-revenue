@@ -1,0 +1,47 @@
+version: "3"
+
+services:
+  # 1. Redpanda (Streaming Engine)
+  redpanda:
+    image: docker.redpanda.com/redpandadata/redpanda:latest
+    container_name: redpanda
+    ports:
+      - "9092:9092"
+      - "29092:29092"
+    command:
+      - redpanda start
+      - --smp 1 
+      - --memory 1G 
+      - --reserve-memory 0M 
+      - --overprovisioned 
+      - --node-id 0 
+      - --check=false
+      - --kafka-addr INTERNAL://0.0.0.0:29092,EXTERNAL://0.0.0.0:9092
+      - --advertise-kafka-addr INTERNAL://redpanda:29092,EXTERNAL://localhost:9092
+
+  # 2. MinIO (Storage Layer) - ADDED BACK
+  minio:
+    image: minio/minio
+    container_name: minio
+    ports:
+      - "9000:9000"
+      - "9001:9001"
+    environment:
+      MINIO_ROOT_USER: admin
+      MINIO_ROOT_PASSWORD: password
+    command: server /data --console-address ":9001"
+
+  # 3. Jupyter Spark (Processing Engine)
+  spark:
+    image: jupyter/pyspark-notebook:spark-3.5.0
+    container_name: spark
+    environment:
+      - CHOWN_HOME=yes
+      - CHOWN_HOME_OPTS='-R'
+    ports:
+      - "8888:8888" # Jupyter
+      - "4040:4040" # Spark UI
+      - "8501:8501" # Streamlit Dashboard <--- ADD THIS LINE
+    volumes:
+      - ./notebooks:/home/jovyan/work
+      - ./warehouse:/home/jovyan/spark-warehouse
