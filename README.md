@@ -19,7 +19,7 @@ Streamflix is a fault-tolerant streaming data pipeline designed to ingest, proce
 ## ⚡ How to Run
 1.  **Clone the repo:**
     ```bash
-    git clone [https://github.com/MohitVaid/streamflix-revenue.git](https://github.com/Mohit24-jpg/streamflix-revenue.git)
+    git clone [https://github.com/Mohit24-jpg/streamflix-revenue.git](https://github.com/Mohit24-jpg/streamflix-revenue.git)
     cd streamflix-revenue
     ```
 2.  **Start Infrastructure:**
@@ -28,9 +28,12 @@ Streamflix is a fault-tolerant streaming data pipeline designed to ingest, proce
     ```
 3.  **Start Pipeline:**
     ```bash
-    # 1. Start Producer
-    python producer.py
+    # 1. Start Producer (Generates fake data)
+    docker exec -it spark python /home/jovyan/work/producer.py
     
-    # 2. Submit Spark Job
-    docker exec -it spark spark-submit ... [Add your command here]
+    # 2. Setup the Iceberg Table
+    docker exec -it spark spark-submit --packages org.apache.spark:spark-sql-kafka-0-10_2.12:3.5.0,org.apache.iceberg:iceberg-spark-runtime-3.5_2.12:1.4.3,org.apache.hadoop:hadoop-aws:3.3.4 /home/jovyan/work/setup_table.py
+
+    # 3. Submit the Streaming Job
+    docker exec -it spark spark-submit --properties-file /home/jovyan/work/spark.conf --packages org.apache.spark:spark-sql-kafka-0-10_2.12:3.5.0,org.apache.iceberg:iceberg-spark-runtime-3.5_2.12:1.4.3,org.apache.hadoop:hadoop-aws:3.3.4 /home/jovyan/work/ingest_job.py
     ```
