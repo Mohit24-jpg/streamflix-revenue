@@ -10,6 +10,8 @@ Unlike traditional batch pipelines that wait overnight to generate reports, Stre
 ## 🏗️ Architecture
 **Flow:** `Producer (Python)` -> `Redpanda (Kafka)` -> `Spark Structured Streaming` -> `Apache Iceberg` -> `MinIO (S3)` -> `Streamlit Dashboard`
 
+![Streamflix Architecture](architecture_diagram.png)
+
 * **Ingestion:** **Redpanda** (Kafka API) acts as the high-throughput message buffer.
 * **Processing:** **Apache Spark Structured Streaming** handles micro-batch processing, schema enforcement, and data transformation.
 * **Storage (The Lakehouse):** **Apache Iceberg** provides ACID compliance, time-travel, and schema evolution on top of raw object storage (**MinIO**).
